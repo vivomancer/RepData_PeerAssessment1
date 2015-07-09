@@ -1,14 +1,20 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r}
+
+```r
 install.packages("ggplot2", repos = 'http://cran.us.r-project.org')
+```
+
+```
+## package 'ggplot2' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+## 	C:\Users\David\AppData\Local\Temp\Rtmpo7NO1q\downloaded_packages
+```
+
+```r
 library("ggplot2")
 activityNa <- read.csv("activity.csv")
 activityNa$date <- as.POSIXlt(as.character(activityNa$date), format="%Y-%m-%d")
@@ -17,23 +23,28 @@ activity <- activityNa[!is.na(activityNa$steps),]
 
 
 ## What is mean total number of steps taken per day?
-```{r byDay}
+
+```r
 #Make a histogram of the total number of steps taken each day
 g <- ggplot(activity, aes(x=date, y=steps)) + 
     stat_summary(fun.y = "sum", geom="bar") + 
     labs(title="Total Number of Steps Taken Per Day", y="Mean Steps")
 print(g)
+```
 
+![](PA1_template_files/figure-html/byDay-1.png) 
+
+```r
 #Calculate and report the mean and median total number of steps taken per day
 stepPerDay <- summary(aggregate(steps ~ as.Date(date), activity ,FUN=sum)$steps)
-
 ```
-The mean total steps taken per day is `r stepPerDay[["Mean"]]` and the median 
-is `r stepPerDay[["Median"]]`.
+The mean total steps taken per day is 1.077\times 10^{4} and the median 
+is 1.076\times 10^{4}.
 
 
 ## What is the average daily activity pattern?
-```{r byInterval}
+
+```r
 #Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and
     #the average number of steps taken, averaged across all days (y-axis)
 g <- ggplot(activity, aes(x=interval, y=steps)) + 
@@ -48,13 +59,14 @@ aggSumInt <- aggregate(steps ~ interval, activity ,FUN=sum)
 maxInt <- aggSumInt[aggSumInt$steps == max(aggSumInt$steps), "interval"]
 ```
 The 5-minute interval with the maximum number of steps averaged across all days 
-is `r maxInt`.
+is 835.
 
 
 
 
 ## Imputing missing values
-```{r impute}
+
+```r
 #Calculate and report the total number of missing values in the dataset 
     #(i.e. the total number of rows with NAs)
 numNa <- sum(is.na(activityNa))
@@ -89,17 +101,20 @@ g <- ggplot(activityNa, aes(x=date, y=steps)) +
     stat_summary(fun.y = "sum", geom="bar") + 
     labs(title="Total Number of Steps Taken Per Day(Imputed)", y="Mean Steps")
 print(g)
-
-stepPerDayI <- summary(aggregate(steps ~ as.Date(date), activityNa ,FUN=sum)$steps)
-
 ```
-The dataset 'activity.csv' has `r numNa` rows with missing values.
+
+![](PA1_template_files/figure-html/impute-1.png) 
+
+```r
+stepPerDayI <- summary(aggregate(steps ~ as.Date(date), activityNa ,FUN=sum)$steps)
+```
+The dataset 'activity.csv' has 2304 rows with missing values.
 
 With imputed values, the mean total steps taken per day is 
-`r stepPerDayI[["Mean"]]` versus the original of `r stepPerDay[["Mean"]]`.
+1.077\times 10^{4} versus the original of 1.077\times 10^{4}.
 
-The median is `r stepPerDayI[["Median"]]` versus the original of 
-`r stepPerDay[["Median"]]`.
+The median is 1.077\times 10^{4} versus the original of 
+1.076\times 10^{4}.
 
 By inserting the mean value of steps per day in more locations in the dataset, 
 the median was moved towards the mean.
@@ -108,7 +123,8 @@ the median was moved towards the mean.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r weekday}
+
+```r
 #Use the dataset with the filled-in missing values for this part.
 #Create a new factor variable in the dataset with two levels -- "weekday" and 
     #"weekend" indicating whether a given date is a weekday or weekend day.
@@ -127,5 +143,6 @@ g <- ggplot(activityNa, aes(x=interval, y=steps)) +
          y="Average number of steps taken, averaged across all days")
 g <- g +facet_grid(weekday ~ .)
 print(g)    
-
 ```
+
+![](PA1_template_files/figure-html/weekday-1.png) 
