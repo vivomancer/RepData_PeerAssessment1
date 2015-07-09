@@ -11,7 +11,7 @@ install.packages("ggplot2", repos = 'http://cran.us.r-project.org')
 ## package 'ggplot2' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\David\AppData\Local\Temp\Rtmpo7NO1q\downloaded_packages
+## 	C:\Users\David\AppData\Local\Temp\RtmpAh5lYi\downloaded_packages
 ```
 
 ```r
@@ -52,7 +52,12 @@ g <- ggplot(activity, aes(x=interval, y=steps)) +
     labs(title="The Average Number of Steps Taken In A Day", 
          x="5-minute interval", 
          y="Average number of steps taken, averaged across all days")
+print(g)
+```
 
+![](PA1_template_files/figure-html/byInterval-1.png) 
+
+```r
 #Which 5-minute interval, on average across all the days in the dataset, 
     #contains the maximum number of steps?
 aggSumInt <- aggregate(steps ~ interval, activity ,FUN=sum)
